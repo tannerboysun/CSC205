@@ -10,7 +10,6 @@ public class Factors {
 	public static void main(String[] args){
 		
 		int maxNumber = 10000;
-		System.out.println("Is 111 prime? : " + isNotPrime(111));
 
 		for (int i = 10; i < maxNumber; i++) {
 		
