@@ -1,3 +1,14 @@
+/*
+ * This class is the foundation for the Menu Items that go inside a Menu Object.
+ * They store information such as an internal ID, a label, and a choice which is
+ * assigned by the program. 
+ *
+ * @creator Tanner Boysun
+ *
+ * @created 2016.09.18
+ *
+ */
+
 public class MenuItem{
 	
 	private String label;

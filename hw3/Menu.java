@@ -1,17 +1,27 @@
-
+/*
+ * This class is the structure for making menus that display in a user 
+ * specified PrintStream
+ *
+ * @creator Tanner Boysun
+ * @created 2016.09.18
+ *
+ * P.S. Sorry for styling, it's habit.
+ */
 import java.util.ArrayList;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class Menu{
 
 	private String title;
+	public static char DFLT_UNDERLINE_CHAR = '=';
 	private char underlineChar = '=';
 	private ArrayList<MenuItem> items = new ArrayList<MenuItem>(); /* Only allows MenuItem objects in ArrayList*/
 
 	public Menu(String Title){
 		this.title = Title;
 	}
-
+	/* ---------------- */
 	/* Accessor Methods */
 	/* ---------------- */
 
@@ -19,7 +29,7 @@ public class Menu{
 		return this.title;
 	}
 
-	public char GetUnderlineChar(){
+	public char getUnderlineChar(){
 		return this.underlineChar;
 	}
 
@@ -36,7 +46,7 @@ public class Menu{
 	}
 
 	public void insert(int pos, MenuItem menuItem){
-		this.items.add(pos, menuItem);
+		this.items.add((pos-1), menuItem); /* Pos - 1 because indexing at 0 */
 	}
 
 	public void remove(MenuItem menuItem){
@@ -62,6 +72,7 @@ public class Menu{
 	public void display(PrintStream out){
 		String underline = "";
 		int charLength = this.title.length();
+		int count = 0;
 
 		for (int i = 0; i < charLength; i++){
 			underline += Character.toString(underlineChar);
@@ -78,13 +89,18 @@ public class Menu{
 			boolean itemEnabled = cur_MenuItem.getEnabled();
 			String cur_MenuItemLabel = cur_MenuItem.getLabel();
 			String prefix = "";
+
 			/* Set appropriate values */
-			cur_MenuItem.setChoice(recurse + 1);
 
 			if (!itemEnabled) {
 				prefix = "*)";
+				cur_MenuItem.setChoice(0);
 			} else {
+				count++;
+				cur_MenuItem.setChoice(count);
 				prefix = cur_MenuItem.getChoice() + ")";
+				//System.out.println("Incremented count");
+
 			}
 
 			out.println(prefix + " " + cur_MenuItemLabel);
@@ -93,5 +109,33 @@ public class Menu{
 
 
 		}
+	}
+
+	public int activate(PrintStream out){
+
+		int result = 0;
+		Scanner input = new Scanner(System.in);
+		boolean found = false;
+
+		do{
+			this.display(out);
+			out.print("\nChoice: ");
+			int response = input.nextInt();
+			for (int check = 0; check < this.items.size(); check++){
+				MenuItem cur_MenuItem = items.get(check);
+				int temp_choice = cur_MenuItem.getChoice();
+
+				if (temp_choice == response) {
+					found = true;
+					result = cur_MenuItem.getId();
+				}
+			}
+
+			if (found == false){
+				out.println("Please enter a valid choice . . . \n");
+			}
+
+		} while (found == false);
+		return result;
 	}
 }
