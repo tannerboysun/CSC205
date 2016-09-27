@@ -19,31 +19,29 @@ public class test {
 		String goof_err = "Goofy user! Learn to follow instructions.";
 
 		String ans = menu();	
-
 		try {
 
 
-			if (ans.equals("non")){
-				throw new GoofyUserException(goof_err);
-			}
+			if (ans != null){
+				if (ans.equals("non")){
+					throw new GoofyUserException(goof_err);
+				} else if (ans.substring(0,2).equals("-d")){	
+					divide(Integer.parseInt((ans.substring(3))));
+				} else if (ans.equals("-p")){	
+					nullPointer();
+				} else if (ans.equals("-r")){ 
+					dummyRuntime(260);
+				} else if (ans.substring(0,2).equals("-t")) {
+					ThrowUp t = new ThrowUp();
+					t.throwUp(ans.charAt(3));
+					//new ThrowUp().throwUp(argv[1].charAt(0));
+				} else {  
+					System.out.println("everything is fine in the try block");
 
-			if (ans.substring(0,2).equals("-d")){	
-				divide(Integer.parseInt((ans.substring(3))));
-			} else if (ans.equals("-p")){	
-				nullPointer();
-			} else if (ans.equals("-r")){ 
-				dummyRuntime(260);
-			} else if (ans.substring(0,2).equals("-t")) {
-				ThrowUp t = new ThrowUp();
-				t.throwUp(ans.charAt(3));
-				//new ThrowUp().throwUp(argv[1].charAt(0));
-			} else if (ans == null) {
-				System.exit(0);
-				
-			} else {  
-				System.out.println("everything is fine in the try block");
-
-			}
+				} 
+			} else {
+					System.exit(0);
+				}
 
 
 		} catch(FloatingPointDivideByZeroException e1) {
@@ -130,10 +128,10 @@ public class test {
 			default: 
 				return "non";
 
-			}
+		}
 
-			
-		
+
+
 
 
 
@@ -179,17 +177,17 @@ class ThrowUp {
 
 
 /*
-   Java's exception handling based on C++ (which was based on ADA)...
-   "termination" (versus resumption) exception handling model is used 
-   (error is so critical there's no way to get back to where the 
-   exeception occurred)...
-   non-RuntimeExceptions are considered "checked" exceptions -- if you
-   call a method that throws a checked exception, then you must catch
-   it or throw it (and, the method must be called from a try block)...
-   generally, you extend Exception -- not RuntimeException...
-   checked Exceptions are forced to be correct at compile-time...
-   if you override a method that throws A and B, then your override
-   method can only throw A and B (i.e. it could not also throw C)...
-   finally block used to set something other than memory back to its
-   original state (e.g. close a file)...
-   */
+	 Java's exception handling based on C++ (which was based on ADA)...
+	 "termination" (versus resumption) exception handling model is used 
+	 (error is so critical there's no way to get back to where the 
+	 exeception occurred)...
+	 non-RuntimeExceptions are considered "checked" exceptions -- if you
+	 call a method that throws a checked exception, then you must catch
+	 it or throw it (and, the method must be called from a try block)...
+	 generally, you extend Exception -- not RuntimeException...
+	 checked Exceptions are forced to be correct at compile-time...
+	 if you override a method that throws A and B, then your override
+	 method can only throw A and B (i.e. it could not also throw C)...
+	 finally block used to set something other than memory back to its
+	 original state (e.g. close a file)...
+ */
