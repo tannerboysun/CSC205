@@ -7,9 +7,22 @@ import java.util.Scanner;
  * command-line options are used to cause various and sundry types
  * of exceptions.
  *
+ * This program was modified to take input from the standard input stream.
+ * an exception has also been created to handle any "Goofy" input from the user
+ * The exception is thrown when an invalid option is entered. 
+ * 
+ *
+ * Application originally wrote by:
  * @creator gdt
+ *
+ * Application modified by:
+ * @editor Tanner Boysun
+ *
+ *
  * @created 02000.04.25
- * @updated 02013.11.20  no code was changed
+ * @updated 02016.09.25 Heavy Modifications Made
+ *
+ *
  * @used csc260, csc210, csc200, csc110 (fall'13)
  */
 
