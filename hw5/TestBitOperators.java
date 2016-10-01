@@ -1,4 +1,17 @@
-
+/*
+ *
+ * This program performs bitwise operators based on user inputs. It then uses exceptions
+ * to catch any potential data entry errors. The program will keep looping until an error 
+ * occurs or until the user inputs -1 -1 during the first prompt
+ *
+ * @creator Tanner Boysun
+ * @created 09/29/2016
+ *
+ *
+ * Some code provided by GDT such as the BitOperators interface.
+ *
+ *
+ */
 
 import java.util.Scanner;
 
@@ -36,7 +49,7 @@ public class TestBitOperators implements BitOperators {
 				parsedResponse[i] = Byte.parseByte(strSplit[i]);
 			}
 			catch(NumberFormatException e1) {
-				System.out.println("ERROR: Data not within range");
+				System.out.println("ERROR: Data not within range or invalid data type");
 			}
 
 		}
@@ -96,10 +109,10 @@ public class TestBitOperators implements BitOperators {
 			System.out.println("ERROR: Wrong amount of Arguments entered");
 			willRun = false;
 		} catch (NumberFormatException e2) {
-			System.out.println("ERROR: Data not within range");
+			System.out.println("ERROR: Data not within range or invalid data type");
 			willRun = false;
 		}// catch (InputMismatchException e3) {
-		//	System.out.println("ERROR: Invalid input, please enter bytes");
+		//	System.out.println("ERROR: Invalid input, please enter byte values");
 		//	willRun = false;
 		//}
 
@@ -107,27 +120,29 @@ public class TestBitOperators implements BitOperators {
 	}
 
 	public BitOperators and(byte a, byte b){
-		System.out.println( a & b);
+		System.out.println(a + " AND " + b + " is " + (a & b));
 		return this;
 	}
 
 	public BitOperators or(byte a, byte b){
-		System.out.println("Or works");
+		System.out.println(a + " OR " + b + " is " + (a | b));
 		return this;
 	}
 
 	public BitOperators xor(byte a, byte b){
-		System.out.println("xor works");
+		System.out.println(a + " XOR " + b + " is " + (a ^ b) );
 		return this;
 	}
 
-	public BitOperators shift(byte n, byte l, byte r){
-		System.out.println("shift works");
+	public BitOperators shift(byte a, byte l, byte r){
+		System.out.println(a + " shifted left " + l + " bits is " + (a << l));
+		System.out.println(a + " shifted right " + r + " bits is " + ( a >> r));
+		System.out.println(a + " unsigned-shifted right " + r + " bits is " + (a >>> r));
 		return this;
 	}
 
 	public BitOperators comp(byte n){
-		System.out.println("com works");
+		System.out.println(n + " COMPLEMENT is " + (~n));  
 		return this;
 	}
 
