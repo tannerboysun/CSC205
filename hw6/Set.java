@@ -33,7 +33,7 @@ public class Set{
 	
 	
 	/*==============
-	 *
+	 * Methods
 	 *///===========
 	
 	boolean isMember(Object element){
@@ -52,7 +52,7 @@ public class Set{
 
 	boolean isSubset(Set other){
 			
-		if (this.intersection(other).equals(this)){
+		if (this.intersection(other).equals(other)){
 			return true;
 		} else {
 			return false;
@@ -68,7 +68,19 @@ public class Set{
 	}
 	
 	Set union(Set other){
-		return this;
+	
+		Set result = new Set();
+
+		for (int i = 0; i < other.size(); i++){
+			result.add(other.retrieve(i));
+		}
+
+		for (int i = 0; i < this.size(); i++){
+			result.add(this.retrieve(i));
+		}
+
+		return result;
+		
 	}
 
 	Set intersection(Set other){
@@ -88,7 +100,19 @@ public class Set{
 	}
 
 	Set difference(Set other){
-		return this;
+		Set result = new Set();
+
+		for (int i = 0; i < other.size(); i++){
+			if (!(this.isMember(other.retrieve(i))))
+				result.add(other.retrieve(i));
+		}
+
+		for (int i = 0; i < this.size(); i++){
+			if (!(other.isMember(this.retrieve(i))))
+				result.add(this.retrieve(i));
+		}
+
+		return result;
 	}
 
 	void add(Object element){
@@ -163,7 +187,7 @@ public class Set{
 
 
 	public static void main(String[] argv){
-
+		// Driver Program
 		Set Emp = new Set();
 
 		System.out.println("Is the Set Emp Empty? " + Emp.isEmpty());
@@ -222,10 +246,71 @@ public class Set{
 
 		Nums.add(4);
 		Nums.add(Tums);
+		
+		Set Crums = new Set(3);
+		Set Bums = new Set(4);
 
-		System.out.println("Does Nums Subnet Tums" );
+		Bums.add(1);
+		Bums.add(2);
+		Bums.add(3);
+		Bums.add(4);
 
+		Crums.add(1);
+		Crums.add(2);
+		Crums.add(3);
 
+		System.out.println("Is Crums a Subset of Bums " + Bums.isSubset(Crums));
+		System.out.println("Is Bums a Subset of Crums " + Crums.isSubset(Bums));
+		
+		Crums.add(7);
+		Crums.add(8);
+		Crums.add(27);
+		System.out.println("Testing Union");
+		System.out.println(Bums + "\t" + Crums);
+		System.out.println(Bums.union(Crums));
+		System.out.println(Bums + "\t" + Crums);
+
+		System.out.println("Difference of Crums and Bums " + Bums.difference(Crums));
+		System.out.println("Difference of Bums and Crums " + Crums.difference(Bums));
+
+		System.out.println("\n\n=================\nThe Thurman Test:\n================= \n\n");
+
+		Set A = new Set(4);
+		Set B = new Set(2);
+
+		A.add(5);
+		A.add(7);
+		A.add(3);
+		A.add(2);
+
+		B.add(2);
+		B.add(6);
+
+		System.out.println("A: " + A + "\t B: " + B + "\n");
+		System.out.println("A Union B:     " + B.union(A));
+		System.out.println("A intersection B:   " + A.intersection(B));
+		System.out.println("A difference B:   " + B.difference(A));
+
+		System.out.println("\n");
+		A.clear();
+		B.clear();
+		// NOTE MY PROGRAM DOESNT ALLOW DUPES
+		A.add(5);
+		A.add(1);
+		A.add(2);
+		A.add(5);
+	
+		B.add(5);
+		B.add(3);
+		B.add(2);
+		B.add(5);
+		B.add(7);
+		B.add(5);
+
+		System.out.println("A: " + A + "\t B: " + B + "\n");
+		System.out.println("A Union B:    " + B.union(A));
+		System.out.println("A intersection B:   " + B.intersection(A));
+		System.out.println("A difference B:   " + B.difference(A));
 	}
 
 }
