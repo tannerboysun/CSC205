@@ -1,9 +1,12 @@
 
 import java.util.ArrayList;
+
 /*
+ * This program is meant to create a set of numbers (excluding duplicates) and perform
+ * Different operations such as difference and union on the Set objects. 
  *
- *
- *
+ *@creator Tanner Boysun
+ *@created 10/07/2016 
  *
  *
  */
@@ -187,7 +190,10 @@ public class Set{
 
 
 	public static void main(String[] argv){
+		// 
 		// Driver Program
+		// This section I wrote the methods to make sure they work properly.
+		//
 		Set Emp = new Set();
 
 		System.out.println("Is the Set Emp Empty? " + Emp.isEmpty());
@@ -272,7 +278,9 @@ public class Set{
 
 		System.out.println("Difference of Crums and Bums " + Bums.difference(Crums));
 		System.out.println("Difference of Bums and Crums " + Crums.difference(Bums));
-
+		
+		// Serious Example
+		//
 		System.out.println("\n\n=================\nThe Thurman Test:\n================= \n\n");
 
 		Set A = new Set(4);
