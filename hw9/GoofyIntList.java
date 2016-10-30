@@ -181,7 +181,52 @@ public GoofyIntList(GoofyIntList list) {
 
 
 class MyGoofyIntList extends GoofyIntList {
-	public MyGoofyIntList(int capacity){}
+	
+	public MyGoofyIntList(int capacity){
+		super(capacity);
+	}
+
+	public MyGoofyIntList(){
+		super();
+	}
+	
+	public MyGoofyIntList(MyGoofyIntList another_GoofyIntList_object){
+		super(another_GoofyIntList_object);
+	}
+
+	public MyGoofyIntList front(){
+		return gotoHead();
+	}
+
+	public MyGoofyIntList back(){
+		return gotoTail();
+	}
+
+	public int search(int x){
+		return search(x, 0);
+	}
+
+	public int get(int index) throws GoofyIntListException{
+		System.out.println("implemented");
+		throw new GoofyIntListException();
+		
+		
+	}
+
+	public MyGoofyIntList insert(int x, boolean before){
+		MyGoofyIntList test = new MyGoofyIntList();
+		return test;
+	}
+
+	public MyGoofyIntList delete(){
+		MyGoofyIntList test = new MyGoofyIntList();
+		return test;
+	}
+
+
+
+
+
 }
 
 class GoofyIntListException extends Exception {
