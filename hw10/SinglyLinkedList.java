@@ -1,6 +1,13 @@
 import java.util.Date;
 
 /*
+ * @Modifier Tanner Boysun
+ * @Modified 2016.11.2
+ *
+ * Credit to gdt for the original Node and SinglyLinkedList code. It was modified to implement a queue
+ * Data structure.
+ *
+ *
  * class SinglyLinkedList is an object-oriented version of a 
  * SinglyLinkedList class that was used to help introduce 
  * singly linked-lists.
@@ -150,9 +157,9 @@ public class SinglyLinkedList {
 
 		String str = new String("Hello World!");
 
-		System.out.println("Before adding elements q2 looks like: " + q2); // Test of toString method.
+		System.out.println("Before adding elements q2 looks like: \n" + q2); // Test of toString method.
 		q2.enqueue(str); // Test of the enqueue method
-		System.out.println("Queue 2 is: " + q2);
+		System.out.println("Queue 2 is: \n" + q2);
 
 		Character c = new Character('c');
 		Integer i = new Integer(1);
@@ -160,12 +167,12 @@ public class SinglyLinkedList {
 
 		q2.enqueue(c).enqueue(i).enqueue(j); // Test of Chaining Methods
 
-		System.out.println("Queue 2 is: " + q2);
+		System.out.println("Queue 2 is: \n" + q2);
 		System.out.println("Is Queue2 at capacity: " + q2.isFull());
 
 		try{ 
 			Object popped =	q2.dequeue();
-			System.out.println("Queue 2 Dequeued looks like: " + q2);
+			System.out.println("Queue 2 Dequeued looks like: \n" + q2);
 			System.out.println(popped + " got dequeued from the queue");
 		} catch (NoSuchElementException a){
 			System.out.println("Looks like the queue is empty!");
@@ -183,7 +190,7 @@ public class SinglyLinkedList {
 		System.out.println("The capacity of Queue2 is " + q2.getCapacity());
 		q2.setCapacity(0);
 		System.out.println("The new capacity of Queue2 is " + q2.getCapacity());
-		System.out.println("Queue2 looks like: " + q2);
+		System.out.println("Queue2 looks like: \n" + q2);
 
 		try {
 			q2.enqueue(c);
@@ -215,8 +222,11 @@ public class SinglyLinkedList {
 		q2.enqueue(c).enqueue(j);
 		System.out.println("Is the Queue still empty? " + q2.isEmpty());
 		System.out.println("Is the Queue full yet? " + q2.isFull());
-		q2.enqueue(j);
+	  q2.enqueue(j);
 		System.out.println("Is the queue full now? " + q2.isFull());	
+
+		System.out.println("The current queue looks like: \n" + q2);
+		
 		/*
 			 SinglyLinkedList list = new SinglyLinkedList();
 
@@ -259,10 +269,6 @@ public class SinglyLinkedList {
 }
 
 class Queue extends SinglyLinkedList{
-
-	// MAKE SURE TO RE-IMPLEMENT isEmpty and isFull!
-	//
-	//
 
 	private final int DEFAULT_CAPACITY = 8;
 	private int capacity;
@@ -316,6 +322,8 @@ class Queue extends SinglyLinkedList{
 		if (newcapacity < this.capacity && getSize() > newcapacity){
 			truncate(newcapacity);
 			this.capacity = newcapacity;
+		} else {
+			this.capacity = newcapacity;
 		}
 
 
@@ -326,13 +334,13 @@ class Queue extends SinglyLinkedList{
 	}
 
 	public boolean isEmpty(){
-		if (getSize() == 0){
+		if (getSize() <= 0){
 			return true;
 		} else { return false; }
 	}
 
 	public boolean isFull(){
-		if (getSize() == this.capacity){
+		if (getSize() >= this.capacity){
 			return true;
 		} else { return false; }
 	}
@@ -341,7 +349,7 @@ class Queue extends SinglyLinkedList{
 		Node head = getHead();
 		String rturn = new String("\nQueue Composition:"
 										         +"\n==================\n");
-		for(int i = 1; i < getSize(); i++){
+		for(int i = 1; i <= getSize(); i++){
 			Node curNode = nth(head, i);
 			Object curItem = curNode.getItem();
 			rturn += (i + ": " + curItem + "\n");
