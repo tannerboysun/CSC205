@@ -178,7 +178,7 @@ public class SinglyLinkedList {
 			System.out.println("Failed to look at front of queue, Queue may be empty");
 		}
 
-  	System.out.println("The size of Queue2 is " + q2.size());
+		System.out.println("The size of Queue2 is " + q2.size());
 
 		System.out.println("The capacity of Queue2 is " + q2.getCapacity());
 		q2.setCapacity(0);
@@ -217,7 +217,7 @@ public class SinglyLinkedList {
 		System.out.println("Is the Queue full yet? " + q2.isFull());
 		q2.enqueue(j);
 		System.out.println("Is the queue full now? " + q2.isFull());	
-				/*
+		/*
 			 SinglyLinkedList list = new SinglyLinkedList();
 
 		// test add method...
@@ -338,8 +338,16 @@ class Queue extends SinglyLinkedList{
 	}
 
 	public String toString(){
-		String hi = new String( "toString yet to be implemented");
-		return hi;
+		Node head = getHead();
+		String rturn = new String("\nQueue Composition:"
+										         +"\n==================\n");
+		for(int i = 1; i < getSize(); i++){
+			Node curNode = nth(head, i);
+			Object curItem = curNode.getItem();
+			rturn += (i + ": " + curItem + "\n");
+		}
+
+		return rturn;
 	}
 
 }
