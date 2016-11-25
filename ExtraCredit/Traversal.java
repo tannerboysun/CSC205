@@ -100,38 +100,39 @@ class Node {
  * The Traversals were taken out of the program because they are irrelevant to the 
  * purpose of this application. Although the code from this program can be used to
  * create non recursive traversal for the original BST class.
-*/
+ */
+
 
 
 class BST {
 
-public Node root;
+	public Node root;
 
-public BST() { root = null; }
+	public BST() { root = null; }
 
-public BST insert(int key) {
-if (root == null) {
-	root = new Node(key);
-	return this;
-}
-return insert(key, root);
-}
-
-public BST insert(int key, Node parent) {
-if (key == parent.key) return this;
-if (key < parent.key) {
-	if (parent.left == null) {
-		parent.left = new Node(key);
-		return this;
+	public BST insert(int key) {
+		if (root == null) {
+			root = new Node(key);
+			return this;
+		}
+		return insert(key, root);
 	}
-	return insert(key, parent.left);
-} 
-if (parent.right == null) {
-	parent.right = new Node(key);
-	return this;
-}
-return insert(key, parent.right);
-}
+
+	public BST insert(int key, Node parent) {
+		if (key == parent.key) return this;
+		if (key < parent.key) {
+			if (parent.left == null) {
+				parent.left = new Node(key);
+				return this;
+			}
+			return insert(key, parent.left);
+		} 
+		if (parent.right == null) {
+			parent.right = new Node(key);
+			return this;
+		}
+		return insert(key, parent.right);
+	}
 }
 // =============== //
 // Traversal Class //
@@ -139,11 +140,11 @@ return insert(key, parent.right);
 
 public class Traversal {
 
-// These methods not only consider a node nonexistant if it's null
-// but also if it has been visited.
+	// These methods not only consider a node nonexistant if it's null
+	// but also if it has been visited.
 
-public static boolean hasLeft(Node current){
-	if (current.left != null && !(current.left.visited)) {
+	public static boolean hasLeft(Node current){
+		if (current.left != null && !(current.left.visited)) {
 			return true;
 		} else {
 			return false;
@@ -166,7 +167,7 @@ public static boolean hasLeft(Node current){
 
 		BST tree = new BST();
 
-		int[] a = { 8, 5, 13, 3, 4, 34, 44, 2, 7, 9, 15, 10 };
+		int[] a = { 5, 2, 4, 1, 3};
 		System.out.println("inputs: ");
 		for (int i = 0; i < a.length; i++) {
 			tree.insert(a[i]);
@@ -182,7 +183,6 @@ public static boolean hasLeft(Node current){
 		// ===============================================================
 
 		do {
-
 			if (!hasLeft(root) && hasRight(root)){
 				root.visit();
 				Parents.Push(root);
@@ -190,15 +190,17 @@ public static boolean hasLeft(Node current){
 			} else if (!hasLeft(root) && !hasRight(root)){
 				// Double checking to make sure the node hasn't already been visited
 				if (!(root.visited)){
-				root.visit();
+					root.visit();
 				}
-				root = Parents.Pop();
+				if (!Parents.isEmpty()) {
+					root = Parents.Pop();
+				}
 			} else if (hasLeft(root)){
 				Parents.Push(root);
 				root = root.left;
 			}
 
-		} while (!Parents.isEmpty() || (hasLeft(root) || hasRight(root)));
+		} while (!Parents.isEmpty() || !root.visited || (hasLeft(root) || hasRight(root)));
 		// While the Parents Stack has stuff and the root has a left or a right node
 
 		// End of the Program
