@@ -2,7 +2,7 @@
  * 
  * @Creator Tanner Boysun
  * @Created 11/22/2016
- * @Version 1.0
+ * @Version 1.1
  * 
  * Original credit for the Node Class, and BST Class to GDT.
  */
