@@ -144,26 +144,17 @@ public class Traversal {
 	// but also if it has been visited.
 
 	public static boolean hasLeft(Node current){
-		if (current.left != null && !(current.left.visited)) {
-			return true;
-		} else {
-			return false;
+		return (current.left != null && !(current.left.visited));
 		}
-	}
 
 	public static boolean hasRight(Node current){
-		if (current.right != null && !(current.right.visited)) {
-			return true;
-		} else {
-			return false;
-		}
-
+		return (current.right != null && !(current.right.visited));
 	}
 
 
 	public static void main(String[] argv){
 
-		Stack Parents = new Stack();
+		Stack parents = new Stack();
 
 		BST tree = new BST();
 
@@ -185,22 +176,22 @@ public class Traversal {
 		do {
 			if (!hasLeft(root) && hasRight(root)){
 				root.visit();
-				Parents.Push(root);
+				parents.Push(root);
 				root = root.right;
 			} else if (!hasLeft(root) && !hasRight(root)){
 				// Double checking to make sure the node hasn't already been visited
 				if (!(root.visited)){
 					root.visit();
 				}
-				if (!Parents.isEmpty()) {
-					root = Parents.Pop();
+				if (!parents.isEmpty()) {
+					root = parents.Pop();
 				}
 			} else if (hasLeft(root)){
-				Parents.Push(root);
+				parents.Push(root);
 				root = root.left;
 			}
 
-		} while (!Parents.isEmpty() || !root.visited || (hasLeft(root) || hasRight(root)));
+		} while (!parents.isEmpty() || !root.visited || (hasLeft(root) || hasRight(root)));
 		// While the Parents Stack has stuff and the root has a left or a right node
 
 		// End of the Program
