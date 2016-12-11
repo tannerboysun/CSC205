@@ -5,6 +5,7 @@
  * @created 02016.11.13
  */
 
+import java.util.ArrayList;
 public class BST {
 
 	public Node root;
@@ -60,6 +61,11 @@ public class BST {
 
 
 
+
+
+
+
+
 		return this;
 	}
 
@@ -94,11 +100,38 @@ public class BST {
 	public BST delete(int key) {
 		Node sub = find(key);
 		if (sub == null) {
-			System.out.println("Key not found in tree");
 			return this;
 		}
 
 		if (sub.parent == null){
+
+			if (sub.left == null && sub.right == null){
+				this.root = null;
+				return this;
+			}
+
+			if (sub.left == null || sub.right == null){
+				if (sub.left == null){
+					root = sub.right;
+					sub.right.parent = null;
+					sub.right = null;
+				} else {
+					root = sub.left;
+					sub.left.parent = null;
+					sub.left = null;
+				}
+				return this;
+			}
+
+			if (sub.left != null && sub.right != null){
+				root = sub.left;
+				sub.right.parent = sub.left;
+				sub.left.right = sub.right;
+				sub.left.parent = null;
+				sub.parent = null;
+				return this;
+			}
+
 			Node max;
 			if (sub.left != null)
 				max = max(sub.left);
@@ -106,22 +139,26 @@ public class BST {
 				max = min(sub.right);
 
 
-			if (max.parent.left != null && max.parent.left == max)
+			if (max.parent.left != null && max.parent.left.key == max.key)
 				max.parent.left = null;
-			else
+			else{
 				max.parent.right = null;
-			root = max;
-			max.left = sub.left;
-			max.right = sub.right;
-			sub.right = null;
-			sub.left = null;
+				root = max;
+				max.left = sub.left;
+				max.right = sub.right;
+				sub.right = null;
+				sub.left = null;
+				max.left.parent = max;
+				max.right.parent = max;
+				max.parent = null;
 
-			return this;
+				return this;
+			}
 		}
 
 		// I know this looks ugly, sorry :(
 		if (sub.left == null && sub.right == null){
-			if (sub.parent.left == sub)
+			if (sub.parent.left != null && sub.parent.left.key == sub.key)
 				sub.parent.left = null;
 			else
 				sub.parent.right = null;
@@ -129,29 +166,37 @@ public class BST {
 		}else	if (sub.left == null || sub.right == null){
 			if (sub.left == null){
 
-				if	(sub.parent.left == sub)
+				if	(sub.parent.left.key == sub.key){
 					sub.parent.left = sub.right;
-				else 
+					sub.right.parent = sub.parent;
+				}else {
 					sub.parent.right = sub.right;
+					sub.right.parent = sub.parent;
+				}
 
 			} else {
 
-				if (sub.parent.left == sub)
+				if (sub.parent.left.key == sub.key){
 					sub.parent.left = sub.left;
-				else 
+					sub.left.parent = sub.parent;
+				} else {
 					sub.parent.right = sub.left;
+					sub.left.parent = sub.parent;
+				}
 			}
 			return this;
 		} else if (sub.left != null && sub.right != null){
-
-			Node max = max(sub);
-			if (max.parent.left == max)
+			Node max = max(sub.left);
+			if (max.parent.left.key == max.key){
 				max.parent.left = null;
-			else 
+				max.parent = sub.parent;
+			} else {
 				max.parent.right = null;
-
-			if (sub.parent.left == sub)
+				max.parent = sub.parent;
+			}
+			if (sub.parent.left.key == sub.key)
 				sub.parent.left = max;
+
 			else
 				sub.parent.right = max;
 
@@ -171,20 +216,20 @@ public class BST {
 	// returns null if key not found
 	//
 
-	Node found = null;
 	public Node find(int key, Node n) {
-		if (key == n.key){
-			found = n;
-			return found;
-		} else { 
-			if (n.left != null)
-				find(key, n.left);
-			if (n.right != null)
-				find(key, n.right);
 
-		}
-		return found;
+		if (key == n.key)
+			return n;	
+		if (key > n.key && n.right != null)
+			return find(key, n.right);
+		else if (key < n.key && n.left != null) 
+			return find(key, n.left);
+		else if (n.left == null && n.right == null && n.key != key)
+			return null;
+		return n;
 	}
+
+
 
 	// begin search for minimum starting with parameter n...
 	//
@@ -213,143 +258,164 @@ public class BST {
 
 	/*
 	 * BST.main(String[] argv) is used to test class BST
-	 */
-	public static void main(String[] argv) {
+ */
 
-		int[] a = { 30, 20, 40, 18, 25, 24, 27, 23, 21, 22, 29, 35, 42 };
 
-		// testing delete...
-		for (int i = 0; i < a.length; i++)
-			delete(init(a), a[i]);
+public static void main(String[] argv) {
 
-		// testing min and max...
-		BST tree = init(a);
-		System.out.println("min = " + tree.min(tree.root).key +
-				"; max = " + tree.max(tree.root).key);
+	int[] a = { 30, 20, 40, 18, 25, 24, 27, 23, 21, 22, 29, 35, 42 };
 
-		// testing find...
-		int[] f = { a[0], a[a.length-1], 205, a[a.length/2] };
-		for (int i = 0; i < f.length; i++)
-			System.out.println("find(" + f[i] + "): " + 
-					((tree.find(f[i]) == null) ? 
-					 "not found" : "found"));
+	// testing delete...
+	for (int i = 0; i < a.length; i++)
+		delete(init(a), a[i]);
 
-		// testing level-order traversal...
-		System.out.println("\nlevel-order traversal:");  
-		tree.levelOrderTraversal(null);
+	// testing min and max...
+	BST tree = init(a);
+	System.out.println("min = " + tree.min(tree.root).key +
+			"; max = " + tree.max(tree.root).key);
 
-		// testing deleting/traversal small trees (1, 2, 3 nodes)...
-		deleteSmallTrees();
+	// testing find...
+	int[] f = { a[0], a[a.length-1], 205, a[a.length/2] };
+	for (int i = 0; i < f.length; i++)
+		System.out.println("find(" + f[i] + "): " + 
+				((tree.find(f[i]) == null) ? 
+				 "not found" : "found"));
 
+	// testing level-order traversal...
+	System.out.println("\nlevel-order traversal:");  
+	tree.levelOrderTraversal(null);
+
+	// testing deleting/traversal small trees (1, 2, 3 nodes)...
+	deleteSmallTrees();
+
+}
+
+static BST init(int[] a) {
+	BST tree = new BST();
+	System.out.print("\ninputs: ");
+	for (int i = 0; i < a.length; i++) {
+		tree.insert(a[i]);
+		System.out.print(a[i] + " ");
 	}
+	System.out.println();
+	return tree;
+}
 
-	static BST init(int[] a) {
-		BST tree = new BST();
-		System.out.print("\ninputs: ");
-		for (int i = 0; i < a.length; i++) {
-			tree.insert(a[i]);
-			System.out.print(a[i] + " ");
-		}
-		System.out.println();
-		return tree;
-	}
+static void delete(BST tree, int key) {
+	tree.preOrderTraversal(null);
+	System.out.println("\ndelete(" + key + ")...");
+	tree.delete(key);
+	tree.preOrderTraversal(null);
+}
 
-	static void delete(BST tree, int key) {
-		tree.preOrderTraversal(null);
-		System.out.println("\ndelete(" + key + ")...");
-		tree.delete(key);
-		tree.preOrderTraversal(null);
-	}
+static void deleteSmallTrees() {
 
-	static void deleteSmallTrees() {
-
-		BST t = new BST();
-		System.out.println("\ninputs: 10");
-		t.insert(10);
+	BST t = new BST();
+	System.out.println("\ninputs: 10");
+	t.insert(10);
+	t.levelOrderTraversal(null);
+	System.out.println("\ndelete(10)...");
+	t.delete(10);
+	if (t.root != null) {
+		System.out.println("\t??? there should be no traversal");
 		t.levelOrderTraversal(null);
-		System.out.println("\ndelete(10)...");
-		t.delete(10);
-		if (t.root != null) {
-			System.out.println("\t??? there should be no traversal");
-			t.levelOrderTraversal(null);
-		} else
-			System.out.println("\tempty tree (no traversal)");
+	} else
+		System.out.println("\tempty tree (no traversal)");
 
-		t = new BST();
-		System.out.println("\ninputs: 10 5");
-		t.insert(10);
-		t.insert(5);
-		t.inOrderTraversal(null);
-		System.out.println("\ndelete(10)...");
-		t.delete(10);
-		t.inOrderTraversal(null);
+	t = new BST();
+	System.out.println("\ninputs: 10 5");
+	t.insert(10);
+	t.insert(5);
+	t.inOrderTraversal(null);
+	System.out.println("\ndelete(10)...");
+	t.delete(10);
+	t.inOrderTraversal(null);
 
-		t = new BST();
-		System.out.println("\ninputs: 10 15");
-		t.insert(10);
-		t.insert(15);
-		t.inOrderTraversal(null);
-		System.out.println("\ndelete(10)...");
-		t.delete(10);
-		t.inOrderTraversal(null);
+	t = new BST();
+	System.out.println("\ninputs: 10 15");
+	t.insert(10);
+	t.insert(15);
+	t.inOrderTraversal(null);
+	System.out.println("\ndelete(10)...");
+	t.delete(10);
+	t.inOrderTraversal(null);
 
-		t = new BST();
-		System.out.println("\ninputs: 10 15 5");
-		t.insert(10);
-		t.insert(15);
-		t.insert(5);
-		t.inOrderTraversal(null);
-		System.out.println("\ndelete(10)...");
-		t.delete(10);
-		t.inOrderTraversal(null);
+	t = new BST();
+	System.out.println("\ninputs: 10 15 5");
+	t.insert(10);
+	t.insert(15);
+	t.insert(5);
+	t.inOrderTraversal(null);
+	System.out.println("\ndelete(10)...");
+	t.delete(10);
+	t.inOrderTraversal(null);
 
-	}
+}
 
-	static void printTraversals(BST tree) {
-		System.out.println("\nin-order:");    
-		tree.inOrderTraversal(null);
+static void printTraversals(BST tree) {
+	System.out.println("\nin-order:");    
+	tree.inOrderTraversal(null);
 
-		System.out.println("\npre-order traversal:");   
-		tree.preOrderTraversal(null);
+	System.out.println("\npre-order traversal:");   
+	tree.preOrderTraversal(null);
 
-		System.out.println("\npost-order traversal:");  
-		tree.postOrderTraversal(null); 
+	System.out.println("\npost-order traversal:");  
+	tree.postOrderTraversal(null); 
 
-		System.out.println("\nlevel-order traversal:");  
-		tree.levelOrderTraversal(null); 
-	}
+	System.out.println("\nlevel-order traversal:");  
+	tree.levelOrderTraversal(null); 
+}
 }
 
 class Node {
 
-	public int key; 
-	public Node parent;
-	public Node left;
-	public Node right;
+public int key; 
+public Node parent;
+public Node left;
+public Node right;
 
-	public Node(int k, Node p) { 
-		this(k, p, null, null);
-	}
+public Node(int k, Node p) { 
+	this(k, p, null, null);
+}
 
-	public Node(int k, Node p, Node l, Node r) { 
-		key = k; 
-		parent = p;
-		right = r; 
-		left = l;
-	}
+public Node(int k, Node p, Node l, Node r) { 
+	key = k; 
+	parent = p;
+	right = r; 
+	left = l;
+}
 
-	public void visit() { 
-		System.out.print("\t" + key);
-		if (parent == null) 
-			System.out.print(" (root  node)");
-		else
-			System.out.print(" (parent: " + parent.key + ")"); 
-		System.out.print(" left: ");
-		if (left == null) System.out.print("na");
-		else System.out.print(left.key);
-		System.out.print("; right: ");
-		if (right == null) System.out.println("na");
-		else System.out.println(right.key);
+public void visit() { 
+	System.out.print("\t" + key);
+	if (parent == null) 
+		System.out.print(" (root  node)");
+	else
+		System.out.print(" (parent: " + parent.key + ")"); 
+	System.out.print(" left: ");
+	if (left == null) System.out.print("na");
+	else System.out.print(left.key);
+	System.out.print("; right: ");
+	if (right == null) System.out.println("na");
+	else System.out.println(right.key);
+}
+}
+
+class Queue {
+private ArrayList<Object> list;
+public Queue(int capacity){
+	list = new ArrayList<Object>(capacity);
+}
+
+public Queue(){
+	list = new ArrayList<Object>(5);
+}
+
+public void enqueue(Object item){
+	list.add(item);
+}
+
+public Object dequeue(){
+
 	}
 }
 
