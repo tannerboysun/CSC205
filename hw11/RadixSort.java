@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.lang.Math*;
 /*
  * class RadixSort was written to help introduce the "radix" sort.
  *
@@ -13,28 +13,31 @@ import java.util.*;
  *          + is hogish with respect to memory usage
 */
 
+
+
+
 public class RadixSort {
 
 static final int EMPTY_SLOT = -1;
 
 public static void main(String[] argv) {
-	boolean tracing = (argv.length == 1);
+boolean tracing = (argv.length == 1);
 
-		int[] a = { 201, 1024, 23, 301, 98, 7, 0, 401, 98, 7, };
-		int[] s = new int[a.length];
+int[] a = {-1, 201, 1024, 23, 301, 98, 7, 0, 401, 98, 7, };
+int[] s = new int[a.length];
 
-		int max = -1;
-		for (int i = 0; i < a.length; i++) {
-			s[i] = a[i];
-			if (s[i] > max) max = s[i];
-		}
+int max = -1;
+for (int i = 0; i < a.length; i++) {
+	s[i] = a[i];
+	if (Math.abs(s[i]) > max) max = s[i]; // Maximum is now relative to the maximum radix, not the absolute maximum number
+	}
 
-		int[][] buckets = new int[10][a.length];
-		init_buckets(buckets);
+	int[][] buckets = new int[10][a.length];
+	init_buckets(buckets);
 
-		if (tracing) print(s);
+	if (tracing) print(s);
 
-		int div = 1;
+	int div = 1;
 		do {
 
 			// fill in the buckets...
