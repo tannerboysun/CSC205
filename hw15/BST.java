@@ -69,6 +69,8 @@ public class BST {
 			cur.visit();	
 			if (cur.left != null)
 				q.enqueue(cur.left);
+			if (cur.right != null)
+				q.enqueue(cur.right);
 		}
 
 		/*
@@ -80,7 +82,7 @@ public class BST {
 		 *   - node = dequeue
 		 *   - visit node (print)
 		 *   - enqueue node's children (left then right)
-		 */
+	 */
 
 
 
@@ -90,144 +92,176 @@ public class BST {
 
 
 
+
+
+
+
+	return this;
+}
+
+public BST insert(int key) {
+	if (root == null) {
+		root = new Node(key, null);
+		nodecnt++;
+		return this;
+	}
+	return insert(key, root);
+}
+
+public BST insert(int key, Node parent) {
+	if (key == parent.key) return this;
+	nodecnt++;
+	if (key < parent.key) {
+		if (parent.left == null) {
+			parent.left = new Node(key, parent);
+			return this;
+		}
+		return insert(key, parent.left);
+	} 
+	if (parent.right == null) {
+		parent.right = new Node(key, parent);
+		return this;
+	}
+	return insert(key, parent.right);
+}
+
+// delete parameter key if found... always returns this 
+//
+public BST delete(int key) {
+
+	// Welcome to the ugliest method i've ever written, but it
+	// works for all cases!
+
+	Node sub = find(key);
+	if (sub == null) {
 		return this;
 	}
 
-	public BST insert(int key) {
-		if (root == null) {
-			root = new Node(key, null);
-			nodecnt++;
-			return this;
-		}
-		return insert(key, root);
-	}
+	if (sub.parent == null){
 
-	public BST insert(int key, Node parent) {
-		if (key == parent.key) return this;
-		nodecnt++;
-		if (key < parent.key) {
-			if (parent.left == null) {
-				parent.left = new Node(key, parent);
-				return this;
-			}
-			return insert(key, parent.left);
-		} 
-		if (parent.right == null) {
-			parent.right = new Node(key, parent);
-			return this;
-		}
-		return insert(key, parent.right);
-	}
-
-	// delete parameter key if found... always returns this 
-	//
-	public BST delete(int key) {
-
-		// Welcome to the ugliest method i've ever written, but it
-		// works for all cases!
-
-		Node sub = find(key);
-		if (sub == null) {
+		if (sub.left == null && sub.right == null){
+			this.root = null;
 			return this;
 		}
 
-		if (sub.parent == null){
+		if (sub.left == null){
+			root = sub.right;
+			sub.right.parent = null;
+			sub.right = null;
+			return this;
 
-			if (sub.left == null && sub.right == null){
-				this.root = null;
-				return this;
-			}
+		} else if (sub.right == null){
+			root = sub.left;
+			sub.left.parent = null;
+			sub.left = null;
+			return this;
+		}
 
-			if (sub.left == null){
-				root = sub.right;
-				sub.right.parent = null;
-				sub.right = null;
-				return this;
-
-			} else if (sub.right == null){
-				root = sub.left;
-				sub.left.parent = null;
-				sub.left = null;
-				return this;
-			}
-
-			if (sub.left != null && sub.right != null){
-				root = sub.left;
-				sub.right.parent = sub.left;
-				sub.left.right = sub.right;
-				sub.left.parent = null;
-				sub.parent = null;
-				return this;
-			}
-
-			Node replace;
-			if (sub.left != null)
-				replace = max(sub.left);
-			else 
-				replace = min(sub.right);
-
+		Node replace;
+		if (sub.left != null && sub.right != null){
+			replace = max(sub.left);
 
 			if (replace.parent.left != null && replace.parent.left.key == replace.key)
 				replace.parent.left = null;
-			else{
+			else
 				replace.parent.right = null;
-				root = replace;
-				replace.left = sub.left;
-				replace.right = sub.right;
-				sub.right = null;
-				sub.left = null;
-				replace.left.parent = replace;
-				replace.right.parent = replace;
-				replace.parent = null;
 
-				return this;
+			root = replace;
+			replace.parent = null;
+
+			if (sub.right != null){
+			replace.right = sub.right;
+			sub.right.parent = replace;
 			}
+
+			if (sub.left != null){
+			sub.left.parent = replace;
+			replace.left = sub.left;
+			}
+			sub.parent = null;
+			return this;
 		}
 
-		// I know this looks ugly, sorry :(
-		if (sub.left == null && sub.right == null){
-			if (sub.parent.left != null && sub.parent.left.key == sub.key)
-				sub.parent.left = null;
-			else
-				sub.parent.right = null;
+		if (sub.left != null)
+			replace = max(sub.left);
+		else 
+			replace = min(sub.right);
+
+
+		if (replace.parent.left != null && replace.parent.left.key == replace.key)
+			replace.parent.left = null;
+		else{
+			replace.parent.right = null;
+			root = replace;
+			replace.left = sub.left;
+			replace.right = sub.right;
+			sub.right = null;
+			sub.left = null;
+			replace.left.parent = replace;
+			replace.right.parent = replace;
+			replace.parent = null;
+
 			return this;
-		}else	if (sub.left == null || sub.right == null){
-			if (sub.left == null){
+		}
+	}
 
-				if	(sub.parent.left.key == sub.key){
-					sub.parent.left = sub.right;
-					sub.right.parent = sub.parent;
-				}else {
-					sub.parent.right = sub.right;
-					sub.right.parent = sub.parent;
-				}
+	// I know this looks ugly, sorry :(
+	if (sub.left == null && sub.right == null){
+		if (sub.parent.left != null && sub.parent.left.key == sub.key)
+			sub.parent.left = null;
+		else
+			sub.parent.right = null;
+		return this;
+	}else	if (sub.left == null || sub.right == null){
+		if (sub.left == null){
 
-			} else {
-
-				if (sub.parent.left.key == sub.key){
-					sub.parent.left = sub.left;
-					sub.left.parent = sub.parent;
-				} else {
-					sub.parent.right = sub.left;
-					sub.left.parent = sub.parent;
-				}
+			if	(sub.parent.left.key == sub.key){
+				sub.parent.left = sub.right;
+				sub.right.parent = sub.parent;
+			}else {
+				sub.parent.right = sub.right;
+				sub.right.parent = sub.parent;
 			}
-			return this;
-		} else if (sub.left != null && sub.right != null){
-			Node max = max(sub.left);
-			if (max.parent.left.key == max.key){
-				max.parent.left = null;
-				max.parent = sub.parent;
+
+		} else {
+
+			if (sub.parent.left.key == sub.key){
+				sub.parent.left = sub.left;
+				sub.left.parent = sub.parent;
 			} else {
-				max.parent.right = null;
-				max.parent = sub.parent;
+				sub.parent.right = sub.left;
+				sub.left.parent = sub.parent;
 			}
-			if (sub.parent.left.key == sub.key)
+		}
+		return this;
+	} else if (sub.left != null && sub.right != null){
+		Node max = max(sub.left);
+
+			if (sub.right.key != max.key){
+			sub.right.parent = max;
+			max.right = sub.right;
+			}
+			
+			if (sub.left.key != max.key){
+			sub.left.parent = max;
+			max.left = sub.left;
+			}
+
+	if (max.parent.left != null && max.parent.left.key == max.key)
+			max.parent.left = null;
+		else
+			max.parent.right = null;
+			
+			if (sub.parent.left != null && sub.parent.left.key == sub.key){
 				sub.parent.left = max;
-
-			else
+			} else {
 				sub.parent.right = max;
+			}
+			max.parent = sub.parent; 
 
+			sub.parent = null;
+			sub.left = null;
+			sub.right = null;
 			return this;
 
 		} else {
