@@ -1,59 +1,71 @@
-/*class BST implements a Binary Search Tree (BST) that is used 
+/*
+ * This program has added extended functionality to the BST class, such as
+ * a level traversal, implementing min and max methods, implementing delete methods
+ * implementation of a queue that supports BST nodes, implementation of a find method
+ * and a few more modifications.
+ *
+ * I apologize for the delete code, I know it's gross but it works for every case.
+ * 
+ * @Creator Tanner Boysun
+ * @Created 12/11/2016
+ * @Credit GDT for original BST program.
+ *
+ * class BST implements a Binary Search Tree (BST) that is used 
  * to demonstrate traversal algorithms.
  *
  * @creator gdt
  * @created 02016.11.13
-*/
+ */
 
 
 import java.util.ArrayList;
 public class BST {
 
-public Node root;
-public int nodecnt;
+	public Node root;
+	public int nodecnt;
 
-public BST() { root = null; nodecnt = 0; }
+	public BST() { root = null; nodecnt = 0; }
 
-public BST inOrderTraversal(Node node) {
-	if (root == null) return this;
-	if (node == null) node = root;
-	if (node.left != null) 
-		inOrderTraversal(node.left);
-	node.visit(); 
-	if (node.right != null) 
-		inOrderTraversal(node.right);
-	return this;
-}
+	public BST inOrderTraversal(Node node) {
+		if (root == null) return this;
+		if (node == null) node = root;
+		if (node.left != null) 
+			inOrderTraversal(node.left);
+		node.visit(); 
+		if (node.right != null) 
+			inOrderTraversal(node.right);
+		return this;
+	}
 
-public BST preOrderTraversal(Node node) {
-	if (root == null) return this;
-	if (node == null) node = root;
-	node.visit(); 
-	if (node.left != null) 
-		preOrderTraversal(node.left);
-	if (node.right != null) 
-		preOrderTraversal(node.right);
-	return this;
-}
+	public BST preOrderTraversal(Node node) {
+		if (root == null) return this;
+		if (node == null) node = root;
+		node.visit(); 
+		if (node.left != null) 
+			preOrderTraversal(node.left);
+		if (node.right != null) 
+			preOrderTraversal(node.right);
+		return this;
+	}
 
-public BST postOrderTraversal(Node node) {
-	if (root == null) return this;
-	if (node == null) node = root;
-	if (node.left != null) 
-		postOrderTraversal(node.left);
-	if (node.right != null) 
-		postOrderTraversal(node.right);
-	node.visit(); 
-	return this;
-}
+	public BST postOrderTraversal(Node node) {
+		if (root == null) return this;
+		if (node == null) node = root;
+		if (node.left != null) 
+			postOrderTraversal(node.left);
+		if (node.right != null) 
+			postOrderTraversal(node.right);
+		node.visit(); 
+		return this;
+	}
 
-public BST levelOrderTraversal(Node node) {
-	Queue q = new Queue();
+	public BST levelOrderTraversal(Node node) {
+		Queue q = new Queue();
 
-	q.enqueue(this.root);
+		q.enqueue(this.root);
 
-	while(!q.isEmpty()){
-		Node cur = q.dequeue();
+		while(!q.isEmpty()){
+			Node cur = q.dequeue();
 			cur.visit();	
 			if (cur.left != null)
 				q.enqueue(cur.left);
@@ -110,6 +122,10 @@ public BST levelOrderTraversal(Node node) {
 	// delete parameter key if found... always returns this 
 	//
 	public BST delete(int key) {
+
+		// Welcome to the ugliest method i've ever written, but it
+		// works for all cases!
+
 		Node sub = find(key);
 		if (sub == null) {
 			return this;
@@ -122,18 +138,18 @@ public BST levelOrderTraversal(Node node) {
 				return this;
 			}
 
-				if (sub.left == null){
-					root = sub.right;
-					sub.right.parent = null;
-					sub.right = null;
-					return this;
+			if (sub.left == null){
+				root = sub.right;
+				sub.right.parent = null;
+				sub.right = null;
+				return this;
 
-				} else if (sub.right == null){
-					root = sub.left;
-					sub.left.parent = null;
-					sub.left = null;
-					return this;
-				}
+			} else if (sub.right == null){
+				root = sub.left;
+				sub.left.parent = null;
+				sub.left = null;
+				return this;
+			}
 
 			if (sub.left != null && sub.right != null){
 				root = sub.left;
