@@ -159,7 +159,7 @@ public BST delete(int key) {
 
 		Node replace;
 		if (sub.left != null && sub.right != null){
-			replace = max(sub.left);
+			replace = min(sub.right);
 
 			if (replace.parent.left != null && replace.parent.left.key == replace.key)
 				replace.parent.left = null;
@@ -182,10 +182,10 @@ public BST delete(int key) {
 			return this;
 		}
 
-		if (sub.left != null)
-			replace = max(sub.left);
-		else 
+		if (sub.right != null)
 			replace = min(sub.right);
+		else 
+			replace = max(sub.left);
 
 
 		if (replace.parent.left != null && replace.parent.left.key == replace.key)
@@ -235,29 +235,29 @@ public BST delete(int key) {
 		}
 		return this;
 	} else if (sub.left != null && sub.right != null){
-		Node max = max(sub.left);
+		Node min = min(sub.right);
 
-			if (sub.right.key != max.key){
-			sub.right.parent = max;
-			max.right = sub.right;
+			if (sub.right.key != min.key){
+			sub.right.parent = min;
+			min.right = sub.right;
 			}
 			
-			if (sub.left.key != max.key){
-			sub.left.parent = max;
-			max.left = sub.left;
+			if (sub.left.key != min.key){
+			sub.left.parent = min;
+			min.left = sub.left;
 			}
 
-	if (max.parent.left != null && max.parent.left.key == max.key)
-			max.parent.left = null;
+	if (min.parent.left != null && min.parent.left.key == min.key)
+			min.parent.left = null;
 		else
-			max.parent.right = null;
+			min.parent.right = null;
 			
 			if (sub.parent.left != null && sub.parent.left.key == sub.key){
-				sub.parent.left = max;
+				sub.parent.left = min;
 			} else {
-				sub.parent.right = max;
+				sub.parent.right = min;
 			}
-			max.parent = sub.parent; 
+			min.parent = sub.parent; 
 
 			sub.parent = null;
 			sub.left = null;
