@@ -9,7 +9,7 @@
 public class Factors {
 	public static void main(String[] args){
 		
-		int maxNumber = 10000;
+		int maxNumber = 1000000;
 
 		for (int i = 10; i < maxNumber; i++) {
 		
