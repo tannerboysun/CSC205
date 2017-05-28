@@ -4,7 +4,7 @@
  * @Created 11/22/2016
  * @Version 1.1
  * 
- * Original credit for the Node Class, and BST Class to GDT.
+ * Original credit for the Node Class, and BST Class to GDT. (GDT Is my Professor)
  */
 
 import java.util.ArrayList;
